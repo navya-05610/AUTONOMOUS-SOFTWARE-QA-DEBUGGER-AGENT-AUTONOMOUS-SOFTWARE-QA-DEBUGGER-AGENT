@@ -1,3 +1,13 @@
+Metadata-Version: 2.4
+Name: autonomous-software-qa-debugger-agent
+Version: 1.0.0
+Summary: A local-first dashboard for running software QA checks and understanding failures.
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: ruff>=0.5; extra == "dev"
+
 # Autonomous Software QA & Debugger Agent
 
 A local-first quality dashboard for Python projects. Scan a project, run selected checks, inspect readable results, and get next-step suggestions. The app has no external service or API-key requirement.
@@ -43,20 +53,11 @@ A local-first quality dashboard for Python projects. Scan a project, run selecte
    python -m pytest -q
    ```
 
-## Deploy to Render
-
-1. Push this project to a GitHub repository you control.
-2. In Render, choose **New → Blueprint**, connect that repository, and deploy the included `render.yaml`.
-3. Render creates a single-user Basic Auth login (`owner` plus a generated password). Retrieve the password from the service's environment settings and use the browser's sign-in prompt.
-4. Open the deployed service URL. The hosted agent can inspect folders available to its Render server; it cannot read folders on your personal computer. The service's project directory is `/opt/render/project/src`.
-
-The Render configuration installs the project and its QA tools, uses Render's `PORT`, binds to `0.0.0.0`, and exposes only a minimal unauthenticated health endpoint. All dashboard and check APIs require Basic Auth. Treat the credentials as secrets and do not share the deployed URL and password publicly. Render's free service filesystem is temporary, so run history may be lost when the service restarts.
-
 The dashboard uses only Python's standard library at runtime. Checks automatically use a scanned project's `.venv` or `venv` when present; otherwise they use the Python environment running the dashboard. `pytest` and `ruff` are development tools; missing tools are reported as unavailable rather than as code failures.
 
 ## Safety and scope
 
-By default, the server listens only on the loopback interface. When bound to a non-local address, it refuses to start unless both `QA_AGENT_USERNAME` and `QA_AGENT_PASSWORD` are configured; dashboard and check routes then require Basic Auth. It accepts fixed check names and does not run user-provided shell commands. Test suites are executable code, however. Only run tests for projects you trust. Checks stop after a configurable bounded timeout (default 120 seconds, maximum 600 seconds). The tool currently checks Python projects; it does not yet apply fixes or inspect other languages.
+The server listens only on the loopback interface and accepts fixed check names; it does not run user-provided shell commands. Test suites are executable code, however. Only run tests for projects you trust. Checks stop after a configurable bounded timeout (default 120 seconds, maximum 600 seconds). The tool currently checks Python projects; it does not yet apply fixes or inspect other languages.
 
 ## VS Code shortcuts
 

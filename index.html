@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10131c">
+  <title>QA Agent — Software Quality Center</title>
+  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="/status.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="brand" href="#top" aria-label="QA Agent home">
+        <span class="brand-mark">Q<span>A</span></span>
+        <span class="brand-copy"><strong>quality<span>lab</span></strong><small>SOFTWARE QA AGENT</small></span>
+      </a>
+      <div class="side-label">WORKSPACE</div>
+      <a class="nav-link active" href="#overview"><span class="nav-icon">◫</span> Overview</a>
+      <a class="nav-link" href="#checks"><span class="nav-icon">◎</span> Quality checks</a>
+      <a class="nav-link" href="#activity"><span class="nav-icon">◷</span> Run history</a>
+      <div class="sidebar-bottom">
+        <div class="local-card"><span class="local-dot"></span><div><strong>Runs locally</strong><small>Your code stays on this machine</small></div></div>
+        <div class="version">QA AGENT <span>v1.0.0</span></div>
+      </div>
+    </aside>
+
+    <main id="top" class="main-content">
+      <header class="topbar"><div class="crumb">Workspace <span>/</span> <strong>Overview</strong></div><div class="top-status"><span class="pulse"></span><span id="service-status">Agent ready</span></div></header>
+      <section id="overview" class="welcome-row">
+        <div><div class="eyebrow"><span class="sparkle">✳</span> YOUR LOCAL QUALITY ENGINE</div><h1>Ship with <span>confidence.</span></h1><p>Test, inspect, and understand your project from one focused workspace.</p></div>
+        <div class="date-chip"><span class="date-icon">◷</span><span id="today-label">Ready when you are</span></div>
+      </section>
+
+      <section class="project-panel panel" aria-labelledby="project-title">
+        <div class="panel-heading"><div class="heading-icon">⌘</div><div><h2 id="project-title">Connect a project</h2><p>Enter the local folder path you want to check.</p></div><span class="step-pill">STEP 01</span></div>
+        <form id="project-form" class="project-form">
+          <label class="sr-only" for="project-path">Project folder path</label>
+          <span class="path-prefix">⌕</span><input id="project-path" name="project_path" autocomplete="off" spellcheck="false" placeholder="C:\Users\you\Projects\my-app" required>
+          <button id="scan-button" class="button button-secondary" type="submit">Scan project <span>→</span></button>
+        </form>
+        <div class="path-hint"><span class="hint-icon">i</span> Use an absolute path. Example: <code>C:\Users\you\Projects\my-app</code></div>
+      </section>
+
+      <section class="metrics-grid" aria-label="Project scan metrics">
+        <article class="metric-card"><div class="metric-top"><span>PROJECT FILES</span><span class="metric-symbol purple">▤</span></div><strong id="metric-files">—</strong><small>Files in this project</small></article>
+        <article class="metric-card"><div class="metric-top"><span>PYTHON FILES</span><span class="metric-symbol blue">⌘</span></div><strong id="metric-python">—</strong><small>Source files inspected</small></article>
+        <article class="metric-card"><div class="metric-top"><span>TEST FILES</span><span class="metric-symbol green">✓</span></div><strong id="metric-tests">—</strong><small>Potential test files found</small></article>
+        <article class="metric-card"><div class="metric-top"><span>SYNTAX ISSUES</span><span class="metric-symbol orange">!</span></div><strong id="metric-issues">—</strong><small>Python parse errors detected</small></article>
+        <article class="metric-card"><div class="metric-top"><span>DIRECTORIES</span><span class="metric-symbol red">◫</span></div><strong id="metric-dirs">—</strong><small>Folders scanned</small></article>
+        <article class="metric-card"><div class="metric-top"><span>TOTAL SIZE</span><span class="metric-symbol violet">◌</span></div><strong id="metric-size">—</strong><small>Disk usage of files</small></article>
+      </section>
+
+      <section id="checks" class="content-grid">
+        <article class="panel checks-panel">
+          <div class="section-title"><div><div class="eyebrow">AUTOMATED ANALYSIS</div><h2>Quality checks</h2></div><span class="count-badge">03 CHECKS</span></div>
+          <div class="check-list">
+            <label class="check-row"><span class="check-icon pytest-icon">Py</span><span class="check-description"><strong>Test suite</strong><small>Run pytest and report failures</small></span><input type="checkbox" name="checks" value="pytest" checked><span class="toggle" aria-hidden="true"></span></label>
+            <label class="check-row"><span class="check-icon lint-icon">R</span><span class="check-description"><strong>Code quality</strong><small>Run Ruff lint checks if installed</small></span><input type="checkbox" name="checks" value="ruff" checked><span class="toggle" aria-hidden="true"></span></label>
+            <label class="check-row"><span class="check-icon syntax-icon">&lt;/&gt;</span><span class="check-description"><strong>Python syntax</strong><small>Parse Python files without executing them</small></span><input type="checkbox" name="checks" value="python_syntax" checked><span class="toggle" aria-hidden="true"></span></label>
+          </div>
+          <div class="checks-footer"><span class="safe-note"><span>⌑</span> Fixed, local checks only</span><button id="run-button" class="button button-primary" type="button" disabled><span class="run-icon">▶</span> Run selected checks</button></div>
+        </article>
+
+        <article class="panel result-panel" aria-live="polite">
+          <div class="section-title"><div><div class="eyebrow">LATEST RUN</div><h2>Results</h2></div><span id="result-badge" class="result-badge idle">WAITING</span></div>
+          <div id="empty-results" class="empty-state"><div class="empty-illustration"><span>✓</span><i></i><b></b></div><strong>Ready for your first scan</strong><p>Connect a project folder to inspect files and run checks.</p></div>
+          <div id="results-content" class="results-content hidden"></div>
+        </article>
+      </section>
+
+      <section id="activity" class="panel history-panel">
+        <div class="section-title"><div><div class="eyebrow">YOUR WORKSPACE</div><h2>Recent activity</h2></div><button id="refresh-history" class="text-button" type="button">Refresh <span>↻</span></button></div>
+        <div id="history-list" class="history-list"><div class="history-empty">No runs yet. Your recent check reports will appear here.</div></div>
+      </section>
+      <footer class="footer"><span>QUALITYLAB <span class="footer-dot">•</span> LOCAL-FIRST SOFTWARE QA</span><span>Designed to help you debug with confidence.</span></footer>
+    </main>
+  </div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+</body>
+</html>

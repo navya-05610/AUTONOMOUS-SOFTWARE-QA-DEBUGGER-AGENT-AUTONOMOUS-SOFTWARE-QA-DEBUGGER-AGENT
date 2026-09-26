@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: autonomous-qa-debugger
+    runtime: python
+    plan: free
+    buildCommand: python -m pip install -e ".[dev]"
+    startCommand: python app.py
+    healthCheckPath: /healthz
+    envVars:
+      - key: HOST
+        value: 0.0.0.0
+      - key: QA_AGENT_USERNAME
+        value: owner
+      - key: QA_AGENT_PASSWORD
+        generateValue: true
